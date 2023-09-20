@@ -1,14 +1,16 @@
 name: A workflow
 on: push
 jobs:
-    build:
+    Docker-Build-Push:
         name: hello word
         runs-on: ubuntu-latest
         steps:
-           - uses: actions/checkout@v1
-           - uses: ./action-a
-             with:
-                MY_NAME: 'cly'
+           - name: check out res code
+             uses: actions/checkout@v2
+           - name: docker image build
+             run: docker build -t demo:v1.0.1 .
+           - name: list docker image
+             run: docker image ls
 
         
         
