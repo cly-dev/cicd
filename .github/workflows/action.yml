@@ -8,13 +8,13 @@ jobs:
            - name: check out res code
              uses: actions/checkout@v2
            - name: docker image build
-             run: docker build -t clydev/demo:v1.0.2 .
+             run: docker build -t clydev/demo:v1.0.3 .
            - name: list docker image
              run: docker image ls
            - name: dockerhub login
              run: docker login -u ${{secrets.DOCKER_USERNAME}} -p ${{secrets.DOCKER_PASSWORD}}
            - name: push to dockerbub
-             run: docker images push clydev/demo:v1.0.2
+             run: docker  push clydev/demo:v1.0.3
 
         
         
