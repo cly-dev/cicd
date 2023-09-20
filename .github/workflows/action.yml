@@ -12,7 +12,7 @@ jobs:
            - name: list docker image
              run: docker image ls
            - name: dockerhub login
-             run: dockerhub login -u ${{secrets.DOCKER_USERNAME}} -p ${{secrets.DOCKER_PASSWORD}}
+             run: docker login -u ${{secrets.DOCKER_USERNAME}} -p ${{secrets.DOCKER_PASSWORD}}
            - name: push to dockerbub
              run: docker images push clydev/demo:v1.0.2
 
