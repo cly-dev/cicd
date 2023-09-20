@@ -1,0 +1,23 @@
+version: '3.8'
+services:
+  demo:
+    build:
+      context: ./
+      dockerfile: dockerfile
+    container_name: test
+    image: test:1.0.1
+    environment:
+      part: 5050
+    ports:
+      - 3031:5050
+    healthcheck:
+      test: ["CMD", "curl","-f","http://localhost:5050"]
+      interval: 1m30s
+      timeout: 30s
+      retries: 5
+      start_period: 10s
+  redier-server:
+    image: redis
+    depends_on:
+      - demo
+        
