@@ -18,6 +18,5 @@ jobs:
             - name: dockerhud login and push
               run: /
                    docker login -u ${{secrets.DOCKER_USERNAME}} -p ${{secrets.DOCKER_PASSWORD}}
-                   docker buildx ls
-                   docker buildx build --platform linux/arm/v7,linux/arm64/v8,linux/amd64 --push -t clydev/demo:1.0.5 .
+                   docker buildx build --platform linux/arm/v7,linux/arm/v6,linux/amd64 --push -t clydev/demo:1.0.5 .
 

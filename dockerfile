@@ -1,4 +1,4 @@
-FROM alpine
+FROM alpine:3.15.10
 ENV part=3030
 WORKDIR /app
 COPY ["./index.js","./package.json","./"]
