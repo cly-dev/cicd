@@ -16,7 +16,7 @@ jobs:
             - name: Set up Docker Buildx
               uses: docker/setup-buildx-action@v1
             - name: dockerhud login and push
-              run: /
+              run: 
                    docker login -u ${{secrets.DOCKER_USERNAME}} -p ${{secrets.DOCKER_PASSWORD}}
                    docker buildx build --platform linux/amd64 --push -t clydev/demo:v1.0.5 .
 
