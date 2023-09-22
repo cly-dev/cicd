@@ -1,0 +1,24 @@
+name: a demo
+
+on:
+  push:
+       branches:
+              - dev
+jobs:
+    Docker-Build-Push:
+        name: hello word
+        runs-on: ubuntu-latest
+        steps:
+            - name: checkout out res code
+              uses: actions/checkout@v2
+            - name: Set up QEMU
+              uses: docker/setup-qemu-action@v3
+            - name: Set up Docker Buildx
+              uses: docker/setup-buildx-action@v3
+            - name: docker image build
+              run: docker build -t clydev/demo:1.0.4 .
+            - name: dockerhud login
+              run: docker login -u ${{secrets.DOCKER_USERNAME}} -p ${{secrets.DOCKER_PASSWORD}}
+            - name: push to dockerhub
+              run: docker push clydev/demo:1.0.4
+
