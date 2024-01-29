@@ -10,24 +10,27 @@ jobs:
         steps:
            - name: check out res code
              uses: actions/checkout@v2
-           - name: Get previous test commit 
+           - name: Get latest commit on release branch
              run: |
-                  PREVIOUS_TEST_COMMIT=$(git rev-parse origin/dev)
-                  echo "::set-output name=previous_test_commit::$PREVIOUS_TEST_COMMIT"
-                  id: get_previous_test_commit
-           - name: Compare code     
+                   LATEST_RELEASE_COMMIT=$(git rev-parse HEAD)
+                   echo "::set-output name=latest_release_commit::$LATEST_RELEASE_COMMIT"
+                   id: get_latest_release_commit
+
+           - name: Get commit list on dev branch
              run: |
-                  PREVIOUS_TEST_COMMIT="${{ steps.get_previous_test_commit.outputs.previous_test_commit }}"
-                  CHANGED_FILES=$(git diff --name-only $PREVIOUS_TEST_COMMIT HEAD)
-                  echo "Changed files: $CHANGED_FILES"
-           - name: Check for new commits
+                  DEV_COMMIT_LIST=$(git log --pretty=format:"%H" origin/dev)
+                  echo "::set-output name=dev_commit_list::$DEV_COMMIT_LIST"
+                  id: get_dev_commit_list
+
+           - name: Check for new commits in dev branch
              run: |
-                  PREVIOUS_TEST_COMMIT="${{ steps.get_previous_test_commit.outputs.previous_test_commit }}"
-                  CURRENT_TEST_COMMIT=$(git rev-parse origin/dev)
-                  if [ "$PREVIOUS_TEST_COMMIT" != "$CURRENT_TEST_COMMIT" ]; then
-                    echo "New commits in test branch. Proceeding with workflow."
+                  LATEST_RELEASE_COMMIT="${{ steps.get_latest_release_commit.outputs.latest_release_commit }}"
+                  DEV_COMMIT_LIST="${{ steps.get_dev_commit_list.outputs.dev_commit_list }}"
+
+                  if echo "$DEV_COMMIT_LIST" | grep -q "$LATEST_RELEASE_COMMIT"; then
+                    echo "Latest release commit is in dev branch. Proceeding with workflow."
                   else
-                    echo "No new commits in test branch. Skipping workflow."
+                    echo "Latest release commit is not in dev branch. Skipping workflow."
                   exit 0
                   fi
 
