@@ -12,27 +12,22 @@ jobs:
              uses: actions/checkout@v2
            - name: Get latest commit on release branch
              run: |
-                   LATEST_RELEASE_COMMIT=$(git rev-parse HEAD)
-                   echo "::set-output name=latest_release_commit::$LATEST_RELEASE_COMMIT"
-                   id: get_latest_release_commit
+                  echo "LATEST_RELEASE_COMMIT=$(git rev-parse HEAD)" >> $GITHUB_ENV
 
            - name: Get commit list on dev branch
              run: |
-                  DEV_COMMIT_LIST=$(git log --pretty=format:"%H" origin/dev)
-                  echo "::set-output name=dev_commit_list::$DEV_COMMIT_LIST"
-                  id: get_dev_commit_list
+                  echo "DEV_COMMIT_LIST=$(git log --pretty=format:%H origin/dev)" >> $GITHUB_ENV
 
            - name: Check for new commits in dev branch
              run: |
-                  LATEST_RELEASE_COMMIT="${{ steps.get_latest_release_commit.outputs.latest_release_commit }}"
-                  DEV_COMMIT_LIST="${{ steps.get_dev_commit_list.outputs.dev_commit_list }}"
-
-                  if echo "$DEV_COMMIT_LIST" | grep -q "$LATEST_RELEASE_COMMIT"; then
+                 LATEST_RELEASE_COMMIT=${LATEST_RELEASE_COMMIT}
+                 DEV_COMMIT_LIST=${DEV_COMMIT_LIST}
+                 if echo "$DEV_COMMIT_LIST" | grep -q "$LATEST_RELEASE_COMMIT"; then
                     echo "Latest release commit is in dev branch. Proceeding with workflow."
-                  else
+                 else
                     echo "Latest release commit is not in dev branch. Skipping workflow."
-                  exit 0
-                  fi
+                    exit 0
+                 fi
 
         
         
