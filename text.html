@@ -1,0 +1,77 @@
+<!--
+ * @Author: cly-dev 2663118046@qq.com
+ * @Date: 2023-12-18 17:55:09
+ * @Description: 
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<script>
+    var twoSum = function(nums, target) {
+    for(let i =0;i<=nums.length;i++){
+        console.log(i);
+        console.log('i---------------')
+        for(let j=i + 1;j<nums.length;j++){
+            console.log(j);
+            console.log('j+++++++++++++++++++++')
+            if(nums[i] + nums[j]===target){
+                return [i,j]
+            }
+        }
+    }
+};
+
+console.log(twoSum([1,2,3,9,4],6))
+
+var isPalindrome = function(x) {
+    return String(x)===x.split('').reverse().join('')
+};
+var romanToInt = function(s) {
+    const sp={
+        I:1,
+        V:5,
+        X:10,
+        L:50,
+        C:100,
+        D:500,
+        M:1000,
+    }
+    let str=0;
+    let i=0;
+    while(i<s.length ){
+            if(sp[s[i]] >= sp[s[i+1]] || i==s.length - 1){
+                
+                str+=sp[s[i]]
+            }else{
+                    str=str-sp[s[i]]
+            }
+        i++
+    }
+    
+    return str;
+    
+};
+
+var longestCommonPrefix = function(strs) {
+    if(strs.length===1){
+        return strs[0]
+    }
+    let str=strs[0]
+    let j=0;
+    while(++j <= str.length){
+        for(let i=0;i<strs.length;++i){
+            if(strs[i].slice(0,j)!==str.slice(0,j)){
+                return str.slice(0,j - 1)
+            }
+        }
+    }
+    return str
+};
+console.log(longestCommonPrefix(['ab','a']))
+console.log('--------------')
+</script>
+</html>
