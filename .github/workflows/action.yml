@@ -12,7 +12,7 @@ jobs:
              uses: actions/checkout@v2
            - name: Get previous test commit 
              run: |
-                  PREVIOUS_TEST_COMMIT=$(git rev-parse origin/test)
+                  PREVIOUS_TEST_COMMIT=$(git rev-parse origin/dev)
                   echo "::set-output name=previous_test_commit::$PREVIOUS_TEST_COMMIT"
                   id: get_previous_test_commit
            - name: Compare code     
@@ -23,7 +23,7 @@ jobs:
            - name: Check for new commits
              run: |
                   PREVIOUS_TEST_COMMIT="${{ steps.get_previous_test_commit.outputs.previous_test_commit }}"
-                  CURRENT_TEST_COMMIT=$(git rev-parse origin/test)
+                  CURRENT_TEST_COMMIT=$(git rev-parse origin/dev)
                   if [ "$PREVIOUS_TEST_COMMIT" != "$CURRENT_TEST_COMMIT" ]; then
                     echo "New commits in test branch. Proceeding with workflow."
                   else
