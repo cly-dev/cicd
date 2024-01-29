@@ -11,164 +11,188 @@
     <title>Document</title>
 </head>
 <body>
-    
+    <div id="demo">
+		<div>11</div>
+		<div>11</div>
+		<div>11</div>
+	</div>
 </body>
 <script>
-  function guid() {
-	const t = Date.now()
-	return `xxxxxxxx-xxxx-4xxx-yxxx-${t}`.replace(/[xy]/g, function (c) {
-		const r = (Math.random() * 16) | 0,
-			v = c == 'x' ? r : (r & (0 * 3)) | (0 * 8)
-		return v.toString(16)
-	})
-}
-let i=0;
-const result=[]
-while(i++ < 100000){
-  result.push(guid());
-}
-const schemeData = [
-		{
-			name: 'A',
-			cases: [
-				{name: '1', ratio: 0.5},
-				{name: '2', ratio: 0.5},
-			],
-		},
-		{
-			name: 'B',
-			cases: [
-				{name: 'X', ratio: 0.5},
-				{name: 'Y', ratio: 0.5},
-			],
-		},{
-      name:'C',
-      cases: [
-				{name: 'X', ratio: 0.5},
-				{name: 'Y', ratio: 0.5},
-			],
-    }
+	const box=document.querySelector("#demo");
+	console.log(box.innerHTML);
+// function guid() {
+// 	const t = Date.now()
+// 	return `xxxxxxxx-xxxx-4xxx-yxxx-${t}`.replace(/[xy]/g, function (c) {
+// 		const r = (Math.random() * 16) | 0,
+// 			v = c == 'x' ? r : (r & (0 * 3)) | (0 * 8)
+// 		return v.toString(16)
+// 	})
+// }
+// let i=0;
+// const result=[]
+// while(i++ < 100000){
+//   result.push(guid());
+// }
+// const schemeData = [
+// 		{
+// 			name: 'A',
+// 			cases: [
+// 				{name: '1', ratio: 0.5},
+// 				{name: '2', ratio: 0.5},
+// 			],
+// 		},
+// 		{
+// 			name: 'B',
+// 			cases: [
+// 				{name: 'X', ratio: 0.5},
+// 				{name: 'Y', ratio: 0.5},
+// 			],
+// 		},{
+//       name:'C',
+//       cases: [
+// 				{name: 'X', ratio: 0.5},
+// 				{name: 'Y', ratio: 0.5},
+// 			],
+//     }
     
-	]
-const obj={
-  a:{
-    0:0,
-    1:0,
-    2:0
-  },
-  b:{
-  0:0,
-    1:0,
-    2:0
-  }
-}
+// 	]
+// const obj={
+//   a:{
+//     0:0,
+//     1:0,
+//     2:0
+//   },
+//   b:{
+//   0:0,
+//     1:0,
+//     2:0
+//   }
+// }
 
-result.forEach((item)=>{
-  const data=generatePlans(item,schemeData)
-  console.log(data)
+// result.forEach((item)=>{
+//   const data=generatePlans(item,schemeData)
+//   console.log(data)
   
-  console.log(data.combinedVariants[data.selectedGroupIndex][data.selectedVariantIndex])
-  // if(data.selectedGroupIndex===0){
-  //   obj['a'][data.selectedVariantIndex]+=1
-  // }else{
-  //   obj['b'][data.selectedVariantIndex]+=1
-  // }
-})
-console.log(obj)
+//   console.log(data.combinedVariants[data.selectedGroupIndex][data.selectedVariantIndex])
+//   // if(data.selectedGroupIndex===0){
+//   //   obj['a'][data.selectedVariantIndex]+=1
+//   // }else{
+//   //   obj['b'][data.selectedVariantIndex]+=1
+//   // }
+// })
+// console.log(obj)
 
-function generatePlans(sessionId, variantGroups) {
-  const combinedVariants = generateCombineVariants(variantGroups);
-  console.log(combinedVariants);
+// function generatePlans(sessionId, variantGroups) {
+//   const combinedVariants = generateCombineVariants(variantGroups);
+//   console.log(combinedVariants);
   
-  if (!sessionId || !variantGroups) return '';
+//   if (!sessionId || !variantGroups) return '';
 
-  const hashValue = hashIdentifier(sessionId);
-  const allVariants = [].concat(...combinedVariants);
-  const totalRatio = allVariants.reduce((sum, variant) => sum + variant.ratio, 0);
-  console.log(totalRatio);
-  console.log('-=----------123123')
-  let cumulativeRatio = 0;
-  let selectedVariantIndex = 0;
-  for (let i = 0; i < allVariants.length; i++) {
-    cumulativeRatio += allVariants[i].ratio / totalRatio;
-    if (hashValue < cumulativeRatio) {
-      selectedVariantIndex = i;
-      break;
-    }
-  }
+//   const hashValue = hashIdentifier(sessionId);
+//   const allVariants = [].concat(...combinedVariants);
+//   const totalRatio = allVariants.reduce((sum, variant) => sum + variant.ratio, 0);
+//   console.log(totalRatio);
+//   console.log('-=----------123123')
+//   let cumulativeRatio = 0;
+//   let selectedVariantIndex = 0;
+//   for (let i = 0; i < allVariants.length; i++) {
+//     cumulativeRatio += allVariants[i].ratio / totalRatio;
+//     if (hashValue < cumulativeRatio) {
+//       selectedVariantIndex = i;
+//       break;
+//     }
+//   }
 
-  let selectedGroupIndex = -1;
-  for (let i = 0; i < combinedVariants.length; i++) {
-    if (selectedVariantIndex < combinedVariants[i].length) {
-      selectedGroupIndex = i;
-      break;
-    }
-    selectedVariantIndex -= combinedVariants[i].length;
-  }
+//   let selectedGroupIndex = -1;
+//   for (let i = 0; i < combinedVariants.length; i++) {
+//     if (selectedVariantIndex < combinedVariants[i].length) {
+//       selectedGroupIndex = i;
+//       break;
+//     }
+//     selectedVariantIndex -= combinedVariants[i].length;
+//   }
 
-  function hashIdentifier(identifier) {
-    let hash = 0;
-    for (let i = 0; i < identifier.length; i++) {
-      hash = (hash << 5) - hash + identifier.charCodeAt(i);
-      hash |= 0;
-    }
-    return (Math.abs(hash) % 1000) / 1000;
-  }
+//   function hashIdentifier(identifier) {
+//     let hash = 0;
+//     for (let i = 0; i < identifier.length; i++) {
+//       hash = (hash << 5) - hash + identifier.charCodeAt(i);
+//       hash |= 0;
+//     }
+//     return (Math.abs(hash) % 1000) / 1000;
+//   }
 
-  return {
-    combinedVariants,
-    selectedGroupIndex,
-    selectedVariantIndex,
-  };
-}
-// 生成 VariantGroup 数组
-function generateCombineVariants(schemeData) {
-	const combinedVariants = []
-	const allTotal = schemeData.reduce((pre, item, index) => {
-		if (index < schemeData.length - 1) {
-			return pre * item.cases.length
-		}
-		return pre
-	}, 1)
-	const result = generate(0, schemeData)
-	if (result) {
-		let temp = []
-		result.forEach(item => {
-			temp.push(item)
-			if (temp.length === result.length / allTotal) {
-				combinedVariants.push(temp)
-				temp = []
-			}
-		})
-	} else {
-		return []
-	}
-	function generate(i, arr, preItem = {name: '', ratio: 1}) {
-		if (arr.length <= i) return []
-		let result = []
+//   return {
+//     combinedVariants,
+//     selectedGroupIndex,
+//     selectedVariantIndex,
+//   };
+// }
+// // 生成 VariantGroup 数组
+// function generateCombineVariants(schemeData) {
+// 	const combinedVariants = []
+// 	const allTotal = schemeData.reduce((pre, item, index) => {
+// 		if (index < schemeData.length - 1) {
+// 			return pre * item.cases.length
+// 		}
+// 		return pre
+// 	}, 1)
+// 	const result = generate(0, schemeData)
+// 	if (result) {
+// 		let temp = []
+// 		result.forEach(item => {
+// 			temp.push(item)
+// 			if (temp.length === result.length / allTotal) {
+// 				combinedVariants.push(temp)
+// 				temp = []
+// 			}
+// 		})
+// 	} else {
+// 		return []
+// 	}
+// 	function generate(i, arr, preItem = {name: '', ratio: 1}) {
+// 		if (arr.length <= i) return []
+// 		let result = []
 
-		arr[i].cases.forEach(item => {
-			if (preItem.name) {
-				if (i === arr.length - 1) {
-					result.push({
-						name: preItem.name + item.name,
-						ratio: preItem.ratio * item.ratio,
-					})
-				}
-			}
-			result = result.concat(
-				generate(i + 1, arr, {
-					name: preItem.name + item.name,
-					ratio: preItem.ratio * item.ratio,
-				}),
-			)
-		})
+// 		arr[i].cases.forEach(item => {
+// 			if (preItem.name) {
+// 				if (i === arr.length - 1) {
+// 					result.push({
+// 						name: preItem.name + item.name,
+// 						ratio: preItem.ratio * item.ratio,
+// 					})
+// 				}
+// 			}
+// 			result = result.concat(
+// 				generate(i + 1, arr, {
+// 					name: preItem.name + item.name,
+// 					ratio: preItem.ratio * item.ratio,
+// 				}),
+// 			)
+// 		})
 
-		return result
-	}
-	return combinedVariants
-}
+// 		return result
+// 	}
+// 	return combinedVariants
+// }
 
 
+// var merge = function(nums1,m,nums2,n) {
+//     nums1=[...nums1.slice(0,m),...nums2.slice(0,n)];
+  
+// 	for(let i=0;i <m + n;i++){
+// 		for(let j=0;j<i;j++){
+// 			if(nums1[j]>nums1[i]){
+// 				let temp=nums1[j];
+// 				nums1[j]=nums1[i];
+// 				nums1[i]=temp;
+// 			}
+// 		}
+// 	}
+//     return nums1
+	
+// };
+// const arr=[];
+// console.log(merge([1,2,3,0,0,0],3,[2,5,6],3))
+const arr='1234556';
 </script>
 </html>

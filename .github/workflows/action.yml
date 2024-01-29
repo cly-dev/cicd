@@ -10,14 +10,26 @@ jobs:
         steps:
            - name: check out res code
              uses: actions/checkout@v2
-           - name: docker image build
-             run: docker build -t clydev/demo:v1.0.3 .
-           - name: list docker image
-             run: docker image ls
-           - name: dockerhub login
-             run: docker login -u ${{secrets.DOCKER_USERNAME}} -p ${{secrets.DOCKER_PASSWORD}}
-           - name: push to dockerbub
-             run: docker  push clydev/demo:v1.0.3
+           - name: Get previous test commit 
+             run: |
+                  PREVIOUS_TEST_COMMIT=$(git rev-parse origin/test)
+                  echo "::set-output name=previous_test_commit::$PREVIOUS_TEST_COMMIT"
+                  id: get_previous_test_commit
+           - name: Compare code     
+             run: |
+                  PREVIOUS_TEST_COMMIT="${{ steps.get_previous_test_commit.outputs.previous_test_commit }}"
+                  CHANGED_FILES=$(git diff --name-only $PREVIOUS_TEST_COMMIT HEAD)
+                  echo "Changed files: $CHANGED_FILES"
+           - name: Check for new commits
+             run: |
+                  PREVIOUS_TEST_COMMIT="${{ steps.get_previous_test_commit.outputs.previous_test_commit }}"
+                  CURRENT_TEST_COMMIT=$(git rev-parse origin/test)
+                  if [ "$PREVIOUS_TEST_COMMIT" != "$CURRENT_TEST_COMMIT" ]; then
+                    echo "New commits in test branch. Proceeding with workflow."
+                  else
+                    echo "No new commits in test branch. Skipping workflow."
+                  exit 0
+                  fi
 
         
         
